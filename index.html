@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetary Data | Solar System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #14b8a6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .data-table-container {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#0f172a',
+                        'secondary-dark': '#1e293b',
+                        'accent-neon': '#14b8a6',
+                        'accent-neon-light': '#2dd4bf',
+                    },
+                    fontFamily: {
+                        mono: ['Space Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-primary-dark font-mono text-gray-100 min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        
+        <header class="mb-8 p-6 border-b-4 border-accent-neon rounded-t-xl bg-secondary-dark/70 backdrop-blur-sm shadow-2xl">
+            <h1 class="text-3xl sm:text-4xl font-bold text-accent-neon-light tracking-wider">
+                Solar System Planetary Data
+            </h1>
+            <p class="text-lg text-gray-400 mt-2">
+                A structured and organized report of key orbital and physical parameters for the major solar bodies.
+            </p>
+        </header>
+
+        <div class="data-table-container rounded-xl shadow-2xl border-2 border-accent-neon/50">
+            <table class="min-w-full divide-y divide-accent-neon/30">
+                
+                <thead class="bg-secondary-dark sticky top-0 z-10">
+                    <tr>
+                        <th scope="col" class="px-3 py-3 sm:px-6 text-left text-xs font-medium text-accent-neon uppercase tracking-wider">
+                            ID
+                        </th>
+                        <th scope="col" class="px-3 py-3 sm:px-6 text-left text-xs font-medium text-accent-neon uppercase tracking-wider">
+                            Visual
+                        </th>
+                        <th scope="col" class="px-3 py-3 sm:px-6 text-left text-xs font-medium text-accent-neon uppercase tracking-wider">
+                            Designation
+                        </th>
+                        <th scope="col" class="px-3 py-3 sm:px-6 text-right text-xs font-medium text-accent-neon uppercase tracking-wider">
+                            Mass (10²⁴ kg)
+                        </th>
+                        <th scope="col" class="px-3 py-3 sm:px-6 text-right text-xs font-medium text-accent-neon uppercase tracking-wider">
+                            Equatorial Radius (km)
+                        </th>
+                        <th scope="col" class="px-3 py-3 sm:px-6 text-right text-xs font-medium text-accent-neon uppercase tracking-wider">
+                            Orbital Period (Earth Days)
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody id="planet-data-body" class="bg-gray-800 divide-y divide-gray-700/50">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        const planets = [
+            { id: 1, name: "Mercury", mass: 0.330, radius: 2440, period: 88, color: "gray-500", imgUrl: "https://placehold.co/100x100/4b5563/e5e7eb?text=MER" },
+            { id: 2, name: "Venus", mass: 4.87, radius: 6052, period: 225, color: "orange-500", imgUrl: "https://placehold.co/100x100/f97316/fff7ed?text=VEN" },
+            { id: 3, name: "Earth", mass: 5.97, radius: 6371, period: 365.25, color: "blue-500", imgUrl: "https://placehold.co/100x100/3b82f6/eff6ff?text=EAU" },
+            { id: 4, name: "Mars", mass: 0.642, radius: 3390, period: 687, color: "red-600", imgUrl: "https://placehold.co/100x100/dc2626/fee2e2?text=MAR" },
+            { id: 5, name: "Jupiter", mass: 1898, radius: 69911, period: 4333, color: "yellow-600", imgUrl: "https://placehold.co/100x100/ca8a04/fffbeb?text=JUP" },
+            { id: 6, name: "Saturn", mass: 568, radius: 58232, period: 10759, color: "amber-400", imgUrl: "https://placehold.co/100x100/fbbf24/78350f?text=SAT" },
+            { id: 7, name: "Uranus", mass: 86.8, radius: 25362, period: 30687, color: "cyan-500", imgUrl: "https://placehold.co/100x100/06b6d4/ecfeff?text=URA" },
+            { id: 8, name: "Neptune", mass: 102, radius: 24622, period: 60190, color: "indigo-600", imgUrl: "https://placehold.co/100x100/4f46e5/eef2ff?text=NEP" }
+        ];
+
+        const tableBody = document.getElementById('planet-data-body');
+
+        planets.forEach((planet, index) => {
+            const row = document.createElement('tr');
+            
+            const rowClass = index % 2 === 0 ? 'bg-gray-800' : 'bg-secondary-dark';
+            row.className = `${rowClass} hover:bg-accent-neon/20 transition duration-150 ease-in-out`;
+
+            const td = (content, className = 'text-left') => {
+                const cell = document.createElement('td');
+                cell.className = `px-3 py-4 sm:px-6 whitespace-nowrap text-sm ${className}`;
+                cell.innerHTML = content;
+                return cell;
+            };
+
+            row.appendChild(td(`<span class="text-accent-neon">${planet.id}</span>`, 'text-left font-bold'));
+
+            row.appendChild(td(`
+                <img src="${planet.imgUrl}" 
+                     alt="${planet.name} Placeholder" 
+                     class="w-10 h-10 rounded-full border border-gray-600 object-cover"
+                     onerror="this.onerror=null; this.src='https://placehold.co/100x100/363636/ffffff?text=ERR';">
+            `, 'text-left'));
+
+            row.appendChild(td(`<span class="text-accent-neon-light">${planet.name}</span>`, 'text-left font-semibold'));
+
+            row.appendChild(td(`${planet.mass.toLocaleString()} <span class="text-gray-500 text-xs">x 10²⁴ kg</span>`, 'text-right'));
+
+            row.appendChild(td(`${planet.radius.toLocaleString()} <span class="text-gray-500 text-xs">km</span>`, 'text-right'));
+
+            row.appendChild(td(`${planet.period.toLocaleString()} <span class="text-gray-500 text-xs">days</span>`, 'text-right font-medium'));
+            
+            tableBody.appendChild(row);
+        });
+    </script>
+</body>
+</html>
